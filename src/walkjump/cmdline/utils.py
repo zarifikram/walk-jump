@@ -56,6 +56,7 @@ def instantiate_seeds(seeds_cfg: DictConfig) -> list[str]:
 def instantiate_model_for_sample_mode(
     sample_mode_model_cfg: DictConfig,
 ) -> NoiseEnergyModel | DenoiseModel:
+    # print current path
     print(
         "[instantiate_model_for_sample_mode]",
         _LOG_MSG_INSTANTIATE_MODEL.format(

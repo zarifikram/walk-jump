@@ -9,9 +9,9 @@ from walkjump.cmdline.utils import instantiate_callbacks
 
 dotenv.load_dotenv(".env")
 
-
 @hydra.main(version_base=None, config_path="../hydra_config", config_name="train")
 def train(cfg: DictConfig) -> bool:
+
     log_cfg = OmegaConf.to_container(cfg, throw_on_missing=True, resolve=True)
 
     wandb.require("service")
@@ -23,6 +23,7 @@ def train(cfg: DictConfig) -> bool:
     datamodule = hydra.utils.instantiate(cfg.data)
     model = hydra.utils.instantiate(cfg.model, _recursive_=False)
 
+    
     if not cfg.dryrun:
         logger = hydra.utils.instantiate(cfg.logger)
     else:
@@ -34,7 +35,7 @@ def train(cfg: DictConfig) -> bool:
 
     if rank_zero_only.rank == 0 and isinstance(trainer.logger, pl.loggers.WandbLogger):
         trainer.logger.experiment.config.update({"cfg": log_cfg})
-
+    wandb.log({"dataset": datamodule.csv_data_path})
     if not cfg.dryrun:
         trainer.fit(model, datamodule=datamodule, ckpt_path=cfg.get("ckpt_path"))
 

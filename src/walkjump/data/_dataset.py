@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 
 from walkjump.constants import ALPHABET_AHO
 from walkjump.utils import token_string_to_tensor
-
+import wandb
 
 @dataclass
 class AbDataset(Dataset):
